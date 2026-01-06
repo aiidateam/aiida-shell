@@ -32,7 +32,7 @@ def launch_shell_job(  # noqa: PLR0913
     metadata: dict[str, t.Any] | None = None,
     submit: bool = False,
     resolve_command: bool = True,
-    monitors: dict[str, Data] | None = None,
+    monitors: dict[str, Dict] | None = None,
 ) -> tuple[dict[str, Data], ProcessNode]:
     """Launch a :class:`aiida_shell.ShellJob` job for the given command.
 
