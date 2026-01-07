@@ -3,6 +3,6 @@ exec > _scheduler-stdout.txt
 exec 2> _scheduler-stderr.txt
 
 
-'/usr/bin/cat' < 'filename' > 'stdout' 2> 'stderr'
+'/usr/bin/diff' < 'filename' > 'stdout' 2> 'stderr'
 
 echo $? > status

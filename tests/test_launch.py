@@ -10,6 +10,9 @@ from aiida.orm import AbstractCode, Computer, Float, Int, RemoteData, Singlefile
 from aiida_shell.calculations.shell import ShellJob
 from aiida_shell.launch import launch_shell_job, prepare_computer
 
+DATE_COMMAND = shutil.which('date')
+assert DATE_COMMAND is not None, 'The `date` command must be available in order to run the tests.'
+
 
 class ShellWorkChain(WorkChain):
     """Implementation of :class:`aiida.engine.processes.workchains.workchain.WorkChain` that submits a ``ShellJob``."""
@@ -86,7 +89,7 @@ def test_arguments():
     shellfunction runs just before midnight and the comparison ``datetime`` call runs in the next day causing the test
     to fail, but that seems extremely unlikely.
     """
-    arguments = ['--iso-8601']
+    arguments = ['-I']  # equivalent to --iso-8601, but supported also on MacOS
     results, node = launch_shell_job('date', arguments=arguments)
 
     assert node.is_finished_ok
@@ -273,7 +276,7 @@ def test_submit_inside_workfunction(submit_and_await):
 @pytest.mark.parametrize(
     'resolve_command, executable',
     (
-        (True, '/usr/bin/date'),
+        (True, DATE_COMMAND),
         (False, 'date'),
     ),
 )
@@ -379,3 +382,25 @@ def test_metadata_computer(generate_computer):
     _, node = launch_shell_job('date', metadata={'computer': computer})
     assert node.is_finished_ok
     assert node.inputs.code.computer.uuid == computer.uuid
+
+
+def test_monitors():
+    """Test the ``monitors`` input."""
+    from aiida.orm import Dict
+
+    # Create simple monitor configurations
+    dict_one = {'entry_point': 'core.always_kill', 'minimum_poll_interval': 60}
+    dict_two = {'entry_point': 'core.always_kill', 'minimum_poll_interval': 120}
+    monitors = {
+        'monitor_one': Dict(dict_one),
+        'monitor_two': Dict(dict_two),
+    }
+
+    _, node = launch_shell_job('date', monitors=monitors)
+    assert node.is_finished_ok
+    assert 'monitors' in node.inputs
+    assert 'monitor_one' in node.inputs.monitors
+    assert 'monitor_two' in node.inputs.monitors
+
+    assert node.inputs.monitors.monitor_one.get_dict() == dict_one
+    assert node.inputs.monitors.monitor_two.get_dict() == dict_two

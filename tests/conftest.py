@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import collections
 import pathlib
+import shutil
 import tempfile
 import typing as t
 import uuid
@@ -170,8 +171,10 @@ def generate_computer():
 @pytest.fixture
 def generate_code(generate_computer):
     """Return a :class:`aiida_shell.data.code.ShellCode` instance, either already existing or created."""
+    default_command = shutil.which('true')  # /bin/true on Linux, /usr/bin/true on macOS
+    assert default_command is not None, 'The `true` command must be available on the system for the tests to run.'
 
-    def factory(command='/bin/true', computer_label='localhost', label=None, entry_point_name='core.shell'):
+    def factory(command=default_command, computer_label='localhost', label=None, entry_point_name='core.shell'):
         """Return a :class:`aiida_shell.data.code.ShellCode` instance, either already existing or created."""
         label = label or str(uuid.uuid4())
         computer = generate_computer(computer_label)

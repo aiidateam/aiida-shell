@@ -11,7 +11,7 @@ import warnings
 from aiida.common import exceptions, lang
 from aiida.common.warnings import AiidaDeprecationWarning
 from aiida.engine import Process, WorkChain, launch
-from aiida.orm import AbstractCode, Computer, Data, ProcessNode, SinglefileData, load_code, load_computer
+from aiida.orm import AbstractCode, Computer, Data, Dict, ProcessNode, SinglefileData, load_code, load_computer
 
 from aiida_shell import ShellCode, ShellJob
 
@@ -32,6 +32,7 @@ def launch_shell_job(  # noqa: PLR0913
     metadata: dict[str, t.Any] | None = None,
     submit: bool = False,
     resolve_command: bool = True,
+    monitors: dict[str, Dict] | None = None,
 ) -> tuple[dict[str, Data], ProcessNode]:
     """Launch a :class:`aiida_shell.ShellJob` job for the given command.
 
@@ -52,6 +53,8 @@ def launch_shell_job(  # noqa: PLR0913
     :param resolve_command: Whether to resolve the command to the absolute path of the executable. If set to ``True``,
         the ``which`` command is executed on the target computer to attempt and determine the absolute path. Otherwise,
         the command is set as the ``filepath_executable`` attribute of the created ``AbstractCode`` instance.
+    :param monitors: Optional dictionary of ``Dict`` nodes to be used as monitors for the job (see AiiDA
+        documentation on how to define monitors).
     :raises TypeError: If the value specified for ``metadata.options.computer`` is not a ``Computer``.
     :raises ValueError: If ``resolve_command=True`` and the absolute path of the command on the computer could not be
         determined.
@@ -69,6 +72,7 @@ def launch_shell_job(  # noqa: PLR0913
         parser=parser,
         metadata=metadata,
         resolve_command=resolve_command,
+        monitors=monitors,
     )
 
     if submit:
@@ -91,6 +95,7 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
     parser: ParserFunctionType | str | None = None,
     metadata: dict[str, t.Any] | None = None,
     resolve_command: bool = True,
+    monitors: dict[str, Dict] | None = None,
 ) -> dict[str, t.Any]:
     """Prepare inputs for the ShellJob based on the provided parameters.
 
@@ -110,6 +115,8 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
     :param resolve_command: Whether to resolve the command to the absolute path of the executable. If set to ``True``,
         the ``which`` command is executed on the target computer to attempt and determine the absolute path. Otherwise,
         the command is set as the ``filepath_executable`` attribute of the created ``AbstractCode`` instance.
+    :param monitors: Optional dictionary of ``Dict`` nodes to be used as monitors for the job (see AiiDA
+        documentation on how to define monitors).
     :raises TypeError: If the value specified for ``metadata.options.computer`` is not a ``Computer``.
     :raises ValueError: If ``resolve_command=True`` and the absolute path of the command on the computer could not be
         determined.
@@ -148,6 +155,8 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
         'parser': parser,
         'metadata': metadata or {},
     }
+    if monitors:
+        inputs['monitors'] = monitors
 
     return inputs
 

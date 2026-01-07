@@ -286,7 +286,11 @@ def test_output_filename(generate_calc_job, generate_code, file_regression):
 def test_filename_stdin(generate_calc_job, generate_code, file_regression):
     """Test the ``metadata.options.filename_stdin`` input."""
     inputs = {
-        'code': generate_code('cat'),
+        # even if 'cat' would be more natural, we use `diff` to avoid issues
+        # in this specific test, because the exact path of the `cat` binary
+        # may differ across systems (Linux vs. MacOS), while `diff` seems
+        # to be (by default) more consistent (in /usr/bin).
+        'code': generate_code('diff'),
         'arguments': List(['{filename}']),
         'nodes': {'filename': SinglefileData.from_string('content')},
         'metadata': {'options': {'filename_stdin': 'filename'}},
