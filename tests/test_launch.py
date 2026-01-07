@@ -382,3 +382,25 @@ def test_metadata_computer(generate_computer):
     _, node = launch_shell_job('date', metadata={'computer': computer})
     assert node.is_finished_ok
     assert node.inputs.code.computer.uuid == computer.uuid
+
+
+def test_monitors():
+    """Test the ``monitors`` input."""
+    from aiida.orm import Dict
+
+    # Create simple monitor configurations
+    dict_one = {'entry_point': 'core.always_kill', 'minimum_poll_interval': 60}
+    dict_two = {'entry_point': 'core.always_kill', 'minimum_poll_interval': 120}
+    monitors = {
+        'monitor_one': Dict(dict_one),
+        'monitor_two': Dict(dict_two),
+    }
+
+    _, node = launch_shell_job('date', monitors=monitors)
+    assert node.is_finished_ok
+    assert 'monitors' in node.inputs
+    assert 'monitor_one' in node.inputs.monitors
+    assert 'monitor_two' in node.inputs.monitors
+
+    assert node.inputs.monitors.monitor_one.get_dict() == dict_one
+    assert node.inputs.monitors.monitor_two.get_dict() == dict_two
