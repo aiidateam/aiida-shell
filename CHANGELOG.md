@@ -3,7 +3,7 @@
 ## `v0.8.2` - 2026-01-14
 
 ### Features
-- Add support for AiiDA monitors [[0522862]](https://github.com/sphuber/aiida-shell/commit/05228623ed7e2f8432b16416a133b3a97c1fca11)
+- Add support for AiiDA monitors [[0522862]](https://github.com/aiidateam/aiida-shell/commit/05228623ed7e2f8432b16416a133b3a97c1fca11)
 
 ## `v0.8.1` - 2025-06-03
 
