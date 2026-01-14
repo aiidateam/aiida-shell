@@ -9,7 +9,7 @@ jobs:
 
   validate-release-tag:
 
-    if: github.repository == 'sphuber/aiida-shell'
+    if: github.repository == 'aiidateam/aiida-shell'
     runs-on: ubuntu-latest
 
     steps:
