@@ -194,7 +194,7 @@ def prepare_code(command: str, computer: Computer | None = None, resolve_command
         else:
             executable = command
 
-        code = ShellCode(  # type: ignore[assignment]
+        code = ShellCode(
             label=command, computer=computer, filepath_executable=executable, default_calc_job_plugin='core.shell'
         ).store()
 
