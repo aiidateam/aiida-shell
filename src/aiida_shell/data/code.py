@@ -5,13 +5,6 @@ import typing as t
 
 from aiida.orm import InstalledCode
 
-try:
-    from aiida.orm.pydantic import OrmMetadataField  # type: ignore[import-not-found]
-
-    _HAS_NEW_MODEL_API = True
-except ImportError:
-    _HAS_NEW_MODEL_API = False
-
 __all__ = ('ShellCode',)
 
 
@@ -22,34 +15,6 @@ class ShellCode(InstalledCode):
     a subclass of :class:`~aiida.orm.nodes.data.code.installed.InstalledCode`. It can therefore be used for any other
     calculation job as well.
     """
-
-    if _HAS_NEW_MODEL_API:
-
-        class CommonField(InstalledCode.CommonField):  # type: ignore[name-defined,misc]
-            """Override `default_calc_job_plugin` to default to `core.shell`."""
-
-            default_calc_job_plugin: t.Optional[str] = OrmMetadataField(
-                'core.shell',
-                alias='input_plugin',
-                title='Default `CalcJob` plugin',
-                description=(
-                    'Entry point name of the default plugin ' '(as listed in `verdi plugin list aiida.calculations`)'
-                ),
-                short_name='-P',
-            )
-
-        class AttributesModel(CommonField, InstalledCode.AttributesModel):  # type: ignore[name-defined,misc]
-            """Attributes model with ``default_calc_job_plugin`` defaulting to ``core.shell``."""
-
-        class ConstructorArgsModel(CommonField, InstalledCode.ConstructorArgsModel):  # type: ignore[name-defined,misc]
-            """Constructor arguments model with ``default_calc_job_plugin`` defaulting to ``core.shell``."""
-
-    else:
-
-        class Model(InstalledCode.Model):
-            """Model describing required information to create an instance."""
-
-            default_calc_job_plugin: t.Optional[str] = 'core.shell'
 
     def __init__(self, *args: t.Any, default_calc_job_plugin: str = 'core.shell', **kwargs: t.Any) -> None:
         """Construct a new instance."""
