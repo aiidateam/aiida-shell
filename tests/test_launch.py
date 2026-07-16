@@ -6,12 +6,16 @@ import shutil
 
 import pytest
 from aiida.engine import WorkChain, run_get_node, workfunction
-from aiida.orm import AbstractCode, Computer, Float, Int, RemoteData, SinglefileData, Str
+from aiida.orm import AbstractCode, Computer, Float, InstalledCode, Int, PortableCode, RemoteData, SinglefileData, Str
+from aiida_shell import ShellCode
 from aiida_shell.calculations.shell import ShellJob
 from aiida_shell.launch import launch_shell_job, prepare_computer
 
 DATE_COMMAND = shutil.which('date')
 assert DATE_COMMAND is not None, 'The `date` command must be available in order to run the tests.'
+
+ECHO_COMMAND = shutil.which('echo')
+assert ECHO_COMMAND is not None, 'The `echo` command must be available in order to run the tests.'
 
 
 class ShellWorkChain(WorkChain):
@@ -373,15 +377,29 @@ def test_preexisting_localhost_no_default_mpiprocs_per_machine(
     Computer.collection.delete(computer.pk)
 
 
-def test_metadata_computer(generate_computer):
-    """Test the ``metadata.computer`` input."""
-    label = 'custom-computer'
-    computer = generate_computer(label=label)
-    assert computer.label == label
+@pytest.mark.parametrize('code_type', ('string', 'shell', 'installed', 'portable'))
+def test_metadata_computer(code_type, generate_computer, tmp_path):
+    """Test that ``metadata.computer`` is respected for different code types."""
+    computer = generate_computer(label=f'computer-{code_type}')
 
-    _, node = launch_shell_job('date', metadata={'computer': computer})
+    if code_type == 'string':
+        command = 'echo'
+    elif code_type == 'shell':
+        command = ShellCode(
+            computer=computer, filepath_executable=ECHO_COMMAND, default_calc_job_plugin='core.shell'
+        ).store()
+    elif code_type == 'installed':
+        command = InstalledCode(computer=computer, filepath_executable=ECHO_COMMAND).store()
+    else:
+        filepath_executable = tmp_path / 'echo.sh'
+        filepath_executable.write_text('#!/bin/bash\necho "$@"\n')
+        filepath_executable.chmod(0o755)
+        command = PortableCode(filepath_executable='echo.sh', filepath_files=tmp_path).store()
+
+    results, node = launch_shell_job(command, arguments=['hello'], metadata={'computer': computer})
     assert node.is_finished_ok
-    assert node.inputs.code.computer.uuid == computer.uuid
+    assert results['stdout'].get_content().strip() == 'hello'
+    assert node.computer.uuid == computer.uuid
 
 
 def test_monitors():

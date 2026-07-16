@@ -132,8 +132,9 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
             AiidaDeprecationWarning,
             stacklevel=2,
         )
+        metadata['computer'] = computer
     else:
-        computer = metadata.pop('computer', None)
+        computer = metadata.get('computer', None)
 
     if isinstance(command, str):
         code = prepare_code(command, computer, resolve_command)
