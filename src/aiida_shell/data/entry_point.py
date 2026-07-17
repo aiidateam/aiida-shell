@@ -9,7 +9,7 @@ from aiida.common.log import AIIDA_LOGGER
 from aiida.orm import Data
 from aiida.plugins.entry_point import get_entry_point
 from aiida.plugins.utils import PluginVersionProvider
-from importlib_metadata import EntryPoint
+from importlib.metadata import EntryPoint
 
 __all__ = ('EntryPointData',)
 
