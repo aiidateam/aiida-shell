@@ -46,7 +46,7 @@ requires-python = '>=3.10'
 dev = [
   'mypy==1.6.1',
   'pre-commit',
-  'pytest~=6.2',
+  'pytest~=8.4',
   'pytest-regressions'
 ]
 docs = [
