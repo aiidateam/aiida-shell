@@ -92,7 +92,7 @@ def test_nodes_folder_data(generate_calc_job, generate_code, tmp_path):
 def test_nodes_remote_data(generate_calc_job, generate_code, tmp_path, aiida_localhost, use_symlinks):
     """Test the ``nodes`` input with ``RemoteData`` nodes."""
     inputs = {
-        'code': generate_code(),
+        'code': generate_code(computer_label=aiida_localhost.label),
         'arguments': [],
         'nodes': {
             'remote': RemoteData(remote_path=str(tmp_path.absolute()), computer=aiida_localhost),
@@ -121,7 +121,7 @@ def test_nodes_remote_data_filename(generate_calc_job, generate_code, tmp_path, 
     remote_data_b = RemoteData(remote_path=str(remote_path_b.absolute()), computer=aiida_localhost)
 
     inputs = {
-        'code': generate_code(),
+        'code': generate_code(computer_label=aiida_localhost.label),
         'arguments': ['{remote_a}'],
         'nodes': {
             'remote_a': remote_data_a,
