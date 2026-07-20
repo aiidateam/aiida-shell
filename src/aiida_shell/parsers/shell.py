@@ -7,6 +7,7 @@
 # For further information please visit http://www.aiida.net               #
 ###########################################################################
 """Parser for a :class:`aiida_shell.ShellJob` job."""
+
 from __future__ import annotations
 
 import pathlib

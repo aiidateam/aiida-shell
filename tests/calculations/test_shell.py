@@ -1,4 +1,5 @@
 """Tests for the :mod:`aiida_shell.calculations.shell` module."""
+
 import pathlib
 import shlex
 
@@ -6,6 +7,7 @@ import pytest
 from aiida.common.datastructures import CodeInfo
 from aiida.engine import run_get_node
 from aiida.orm import Data, Float, FolderData, Int, List, RemoteData, SinglefileData, Str
+
 from aiida_shell.calculations.shell import ShellJob
 from aiida_shell.data import EntryPointData, PickledData
 

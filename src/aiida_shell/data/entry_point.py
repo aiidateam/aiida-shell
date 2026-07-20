@@ -1,4 +1,5 @@
 """Data plugin to store a reference to an entry point."""
+
 from __future__ import annotations
 
 import typing as t

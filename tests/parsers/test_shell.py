@@ -1,9 +1,11 @@
 """Tests for the :mod:`aiida_shell.parsers.shell` module."""
+
 import copy
 import pathlib
 
 import pytest
 from aiida.orm import FolderData, List, SinglefileData
+
 from aiida_shell.calculations.shell import ShellJob
 
 
