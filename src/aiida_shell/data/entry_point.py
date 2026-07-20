@@ -1,7 +1,9 @@
 """Data plugin to store a reference to an entry point."""
+
 from __future__ import annotations
 
 import typing as t
+from importlib.metadata import EntryPoint
 
 from aiida.common.exceptions import EntryPointError
 from aiida.common.lang import type_check
@@ -9,7 +11,6 @@ from aiida.common.log import AIIDA_LOGGER
 from aiida.orm import Data
 from aiida.plugins.entry_point import get_entry_point
 from aiida.plugins.utils import PluginVersionProvider
-from importlib.metadata import EntryPoint
 
 __all__ = ('EntryPointData',)
 

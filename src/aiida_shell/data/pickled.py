@@ -1,4 +1,5 @@
 """Data plugin to store (almost) any Python object by pickling it."""
+
 from __future__ import annotations
 
 import importlib.metadata

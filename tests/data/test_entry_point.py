@@ -1,9 +1,12 @@
 """Tests for the :mod:`aiida_shell.data.entry_point` module."""
+
+from importlib.metadata import EntryPoint
+
 import pytest
 from aiida.orm import load_node
 from aiida.plugins.entry_point import get_entry_point
+
 from aiida_shell.data.entry_point import EntryPointData
-from importlib.metadata import EntryPoint
 
 InvalidEntryPoint = EntryPoint('b', 'a', group='c')
 InconsistentEntryPoint = EntryPoint('b', 'aiida_shell.data.pickled:PickledData', group='c')

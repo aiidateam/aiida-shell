@@ -1,8 +1,10 @@
 #!/usr/bin/env runaiida
 """Simulation of lysozyme protein dynamics using GROMACS."""
+
 import urllib.request
 
 from aiida import engine, orm
+
 from aiida_shell import launch_shell_job
 
 # Download the lysozyme protein structure.
