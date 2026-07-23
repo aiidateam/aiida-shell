@@ -8,6 +8,7 @@ import shutil
 import pytest
 from aiida.engine import WorkChain, run_get_node, workfunction
 from aiida.orm import AbstractCode, Computer, Float, InstalledCode, Int, PortableCode, RemoteData, SinglefileData, Str
+
 from aiida_shell import ShellCode
 from aiida_shell.calculations.shell import ShellJob
 from aiida_shell.launch import launch_shell_job, prepare_computer
