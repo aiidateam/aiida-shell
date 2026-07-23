@@ -1,6 +1,8 @@
 #!/usr/bin/env runaiida
 """Simulation of Lennard-Jones fluid using LAMMPS."""
+
 from aiida import orm
+
 from aiida_shell import launch_shell_job
 
 script = """

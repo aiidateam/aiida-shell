@@ -1,5 +1,7 @@
 """Tests for :mod:`aiida_shell.data.code`."""
+
 import pytest
+
 from aiida_shell.data.code import ShellCode
 
 

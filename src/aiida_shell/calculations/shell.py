@@ -1,4 +1,5 @@
 """Implementation of :class:`aiida.engine.CalcJob` to make it easy to run an arbitrary shell command on a computer."""
+
 from __future__ import annotations
 
 import inspect

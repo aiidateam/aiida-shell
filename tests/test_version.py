@@ -1,6 +1,8 @@
 """Tests for the :mod:`aiida_shell` module."""
-import aiida_shell
+
 from packaging.version import Version, parse
+
+import aiida_shell
 
 
 def test_version():

@@ -1,8 +1,10 @@
 #!/usr/bin/env runaiida
 """Simulation of electronic band structure of GaAs using Quantum ESPRESSO."""
+
 import urllib.request
 
 from aiida import engine, orm
+
 from aiida_shell import launch_shell_job
 
 # Generate a folder with the required pseudopotentials

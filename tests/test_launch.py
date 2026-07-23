@@ -1,4 +1,5 @@
 """Tests for the :mod:`aiida_shell.launch` module."""
+
 import datetime
 import json
 import pathlib

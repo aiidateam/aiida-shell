@@ -1,11 +1,13 @@
 """Tests for the :mod:`aiida_shell.calculations.shell` module."""
+
 import pathlib
 import shlex
 
 import pytest
 from aiida.common.datastructures import CodeInfo
 from aiida.engine import run_get_node
-from aiida.orm import Data, Float, FolderData, Int, List, RemoteData, SinglefileData, Str
+from aiida.orm import Data, Float, FolderData, Int, List, Log, RemoteData, SinglefileData, Str
+
 from aiida_shell.calculations.shell import ShellJob
 from aiida_shell.data import EntryPointData, PickledData
 
@@ -90,7 +92,7 @@ def test_nodes_folder_data(generate_calc_job, generate_code, tmp_path):
 def test_nodes_remote_data(generate_calc_job, generate_code, tmp_path, aiida_localhost, use_symlinks):
     """Test the ``nodes`` input with ``RemoteData`` nodes."""
     inputs = {
-        'code': generate_code(),
+        'code': generate_code(computer_label=aiida_localhost.label),
         'arguments': [],
         'nodes': {
             'remote': RemoteData(remote_path=str(tmp_path.absolute()), computer=aiida_localhost),
@@ -119,7 +121,7 @@ def test_nodes_remote_data_filename(generate_calc_job, generate_code, tmp_path, 
     remote_data_b = RemoteData(remote_path=str(remote_path_b.absolute()), computer=aiida_localhost)
 
     inputs = {
-        'code': generate_code(),
+        'code': generate_code(computer_label=aiida_localhost.label),
         'arguments': ['{remote_a}'],
         'nodes': {
             'remote_a': remote_data_a,
@@ -451,7 +453,7 @@ def test_parser_over_daemon(generate_code, submit_and_await):
     assert node.outputs.string == value
 
 
-def test_input_output_filename_overlap(generate_calc_job, generate_code, tmp_path, caplog):
+def test_input_output_filename_overlap(generate_calc_job, generate_code, tmp_path):
     """Test functionality when input and output filenames overlap."""
     code = generate_code()
 
@@ -479,18 +481,22 @@ def test_input_output_filename_overlap(generate_calc_job, generate_code, tmp_pat
 
     # If the filename clash is due to an "implicit" filename, instead of raising, the filename of the node should be
     # automatically made unique and a warning logged to make the user aware.
-    dirpath, calc_info = generate_calc_job(
-        'core.shell',
-        inputs={
+    def generate_inputs():
+        return {
             'code': code,
             'nodes': {'file': SinglefileData.from_string('content', filename='stdout')},
-        },
-    )
+        }
+
+    dirpath, calc_info = generate_calc_job('core.shell', inputs=generate_inputs())
+    process = generate_calc_job('core.shell', inputs=generate_inputs(), return_process=True)
+
     code_info = calc_info.codes_info[0]
     filenames = [p.name for p in dirpath.iterdir()]
     assert code_info.stdout_name not in filenames
     assert code_info.stderr_name not in filenames
-    assert 'filename `stdout` for node `file` overlaps' in caplog.records[0].message
+
+    message = 'filename `stdout` for node `file` overlaps'
+    assert any(message in entry.message for entry in Log.collection.get_logs_for(process.node))
 
     # If the contents of a ``FolderData`` overlap with a reserved filename, an exception is raised. This is done because
     # not doing everything will most likely fail the calculation as some input files will be overwritten. The plugin can

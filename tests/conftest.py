@@ -1,4 +1,5 @@
 """Module with test fixtures."""
+
 from __future__ import annotations
 
 import collections
@@ -18,6 +19,7 @@ from aiida.engine.utils import instantiate_process
 from aiida.manage.manager import get_manager
 from aiida.orm import CalcJobNode, Computer, FolderData
 from aiida.plugins import CalculationFactory, ParserFactory
+
 from aiida_shell import ShellCode
 
 pytest_plugins = 'aiida.tools.pytest_fixtures'
@@ -86,7 +88,7 @@ def generate_calc_job(tmp_path_factory):
         manager = get_manager()
         runner = manager.get_runner()
 
-        process_class: t.Type['CalcJob'] = CalculationFactory(entry_point_name)  # type: ignore[assignment]
+        process_class: t.Type[CalcJob] = CalculationFactory(entry_point_name)  # type: ignore[assignment]
         process: CalcJob = instantiate_process(runner, process_class, **inputs or {})  # type: ignore[assignment]
 
         if presubmit:
