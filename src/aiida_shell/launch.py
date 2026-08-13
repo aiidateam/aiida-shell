@@ -124,18 +124,18 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
     :returns: A dictionary containing prepared inputs for the ShellJob.
     """
     metadata = metadata or {}
-    computer = metadata.get('options', {}).pop('computer', None)
+    options = metadata.get('options', {})
 
-    if computer:
+    if 'computer' in options:
         warnings.warn(
             'Specifying a computer through `metadata.options.computer` in `launch_shell_job` is deprecated. Please use '
             '`metadata.computer` instead.',
             AiidaDeprecationWarning,
             stacklevel=2,
         )
-        metadata['computer'] = computer
-    else:
-        computer = metadata.get('computer', None)
+        metadata['computer'] = options.pop('computer')
+
+    computer = metadata.get('computer')
 
     if isinstance(command, str):
         code = prepare_code(command, computer, resolve_command)
@@ -155,7 +155,7 @@ def prepare_shell_job_inputs(  # noqa: PLR0913
         'arguments': arguments,
         'outputs': outputs,
         'parser': parser,
-        'metadata': metadata or {},
+        'metadata': metadata,
     }
     if monitors:
         inputs['monitors'] = monitors
