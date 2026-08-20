@@ -1,5 +1,11 @@
 # Change log
 
+## `v0.9.0` - 2026-08-24
+
+### Breaking changes
+- `ShellCode`: drop redundant `Model` override (#116) [[e2f4ff1]](https://github.com/aiidateam/aiida-shell/commit/e2f4ff1c96e5e38d7bafacb0ca65495ebe492167)
+
+
 ## `v0.8.2` - 2026-01-14
 
 ### Features
