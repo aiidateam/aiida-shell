@@ -1,13 +1,13 @@
 # Change log
 
-## `v0.9.0` - 2026-08-25
+## `v0.9.0` - 2026-08-26
 
 ### Breaking changes
 - Drop support for Python 3.9; the minimum supported version is now 3.10 (#120) [[91a09bb]](https://github.com/aiidateam/aiida-shell/commit/91a09bb94e540a114062f2a0d05894a013c0f369)
-- `ShellCode`: drop the redundant `Model` override for compatibility with the restructured `aiida-core` ORM models. `ShellCode.Model` no longer sets `core.shell` as the default for `default_calc_job_plugin`; codes created through the API or `verdi code create core.code.installed.shell` still get it. (#116) [[e2f4ff1]](https://github.com/aiidateam/aiida-shell/commit/e2f4ff1c96e5e38d7bafacb0ca65495ebe492167)
+- `ShellCode`: drop redundant `Model` override (#116) [[e2f4ff1]](https://github.com/aiidateam/aiida-shell/commit/e2f4ff1c96e5e38d7bafacb0ca65495ebe492167)
 
 ### Fixes
-- `launch_shell_job`: support `PortableCode` by no longer consuming `metadata.computer` (#119) [[ffd4b78]](https://github.com/aiidateam/aiida-shell/commit/ffd4b78d434af6a34aef7744bf0d6f73ae88ce10)
+- `launch_shell_job`: support `PortableCode` (#119) [[ffd4b78]](https://github.com/aiidateam/aiida-shell/commit/ffd4b78d434af6a34aef7744bf0d6f73ae88ce10)
 
 ### Dependencies
 - Add support for Python 3.13 and 3.14 (#120) [[91a09bb]](https://github.com/aiidateam/aiida-shell/commit/91a09bb94e540a114062f2a0d05894a013c0f369)
@@ -16,7 +16,7 @@
 - `ci`: fix CI rot (#117) [[49606d9]](https://github.com/aiidateam/aiida-shell/commit/49606d997c95e440f6d40fd2601fdbb48163e41c)
 - Update dependency requirement `mypy~=2.3.0` (#120) [[b7333d0]](https://github.com/aiidateam/aiida-shell/commit/b7333d021d603c9bf4d516f46db1973b4cd8215a)
 - Update dependency requirement `pytest~=8.4` (#120) [[b83f6dd]](https://github.com/aiidateam/aiida-shell/commit/b83f6dd4af6eb3431938dec66f524a6ce4b68226)
-- Update the `ruff` pre-commit hook (#120) [[948c94f]](https://github.com/aiidateam/aiida-shell/commit/948c94f7451e9f90af78ee9ceb15dbc9e66cca21)
+- Update `ruff` pre-commit hook (#120) [[948c94f]](https://github.com/aiidateam/aiida-shell/commit/948c94f7451e9f90af78ee9ceb15dbc9e66cca21)
 - Run pre-commit on Python 3.11 (#120) [[992313f]](https://github.com/aiidateam/aiida-shell/commit/992313f7f2efc658cd9ba06df383ec26d76ef97e)
 - Apply `pyupgrade --py310-plus` (#120) [[5060bde]](https://github.com/aiidateam/aiida-shell/commit/5060bdec109c1c7d3cf0d824339b83ffe8a4fe7a)
 - Match remote-data tests to localhost (#120) [[cfc0dcd]](https://github.com/aiidateam/aiida-shell/commit/cfc0dcd30c5701642cf50fd0268df72b5fe90fde)
